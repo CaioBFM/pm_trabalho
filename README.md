@@ -21,15 +21,15 @@ O problema ALWABP (Assembly Line Worker Assignment and Balancing Problem) consis
 
 ## Conjuntos e Parâmetros
 
-| Símbolo         | Descrição                                                                                            |
-| :-------------- | :--------------------------------------------------------------------------------------------------- |
-| N = {1, ..., n} | Conjunto de tarefas.                                                                                 |
-| W = {1, ..., k} | Conjunto de trabalhadores.                                                                           |
-| S = {1, ..., m} | Conjunto de estações de trabalho. Assume-se m=k (uma estação por trabalhador).                       |
-| P               | Conjunto de pares de precedência (i, j) em N x N, onde i deve preceder j.                            |
-| t_wi            | Tempo de execução da tarefa i por trabalhador w.                                                     |
-| I_w             | Conjunto de tarefas que o trabalhador w é incapaz de executar (t_wi = infinito, para todo i em I_w). |
-| M               | Uma constante grande (Big M).                                                                        |
+| Símbolo         | Descrição                                                                                         |
+| :-------------- | :------------------------------------------------------------------------------------------------ |
+| N = {1, ..., n} | Conjunto de tarefas.                                                                              |
+| W = {1, ..., k} | Conjunto de trabalhadores.                                                                        |
+| S = {1, ..., m} | Conjunto de estações de trabalho. Assume-se m=k (uma estação por trabalhador).                    |
+| P               | Conjunto de pares de precedência (i, j) em N x N, onde i deve preceder j.                         |
+| t_wi            | Tempo de execução da tarefa i por trabalhador w.                                                  |
+| I_w             | Conjunto de tarefas que o trabalhador w é incapaz de executar (t_wi = infinito \forall i em I_w). |
+| M               | Uma constante grande (Big M).                                                                     |
 
 ## Variáveis de Decisão
 
@@ -45,7 +45,7 @@ O problema ALWABP (Assembly Line Worker Assignment and Balancing Problem) consis
 Minimizar o tempo de ciclo da linha de produção:
 
 ```math
-min C_max
+min C_{max}
 ```
 
 ## Restrições
@@ -55,19 +55,19 @@ min C_max
 Cada tarefa deve ser designada a exatamente uma estação:
 
 ```math
-∑_{s ∈ S} y_{si} = 1   para todo i ∈ N   (R1)
+∑_{s ∈ S} y_{si} = 1   \forall i ∈ N   (R1)
 ```
 
 Cada trabalhador deve ser alocado a exatamente uma estação:
 
 ```math
-∑_{s ∈ S} z_{ws} = 1   para todo w ∈ W   (R2)
+∑_{s ∈ S} z_{ws} = 1   \forall w ∈ W   (R2)
 ```
 
 Cada estação deve ter exatamente um trabalhador alocado:
 
 ```math
-∑_{w ∈ W} z_{ws} = 1   para todo s ∈ S   (R3)
+∑_{w ∈ W} z_{ws} = 1   \forall s ∈ S   (R3)
 ```
 
 ### 2. Linearização e Restrição de Incapacidade
@@ -75,15 +75,15 @@ Cada estação deve ter exatamente um trabalhador alocado:
 Linearização do produto y_si \* z_ws através da variável u_wis:
 
 ```math
-u_{wis} ≤ y_{si}   para todo i ∈ N, w ∈ W, s ∈ S   (R4.1)
-u_{wis} ≤ z_{ws}   para todo i ∈ N, w ∈ W, s ∈ S   (R4.2)
-u_{wis} ≥ y_{si} + z_{ws} - 1   para todo i ∈ N, w ∈ W, s ∈ S   (R4.3)
+u_{wis} ≤ y_{si}   \forall i ∈ N, w ∈ W, s ∈ S   (R4.1)
+u_{wis} ≤ z_{ws}   \forall i ∈ N, w ∈ W, s ∈ S   (R4.2)
+u_{wis} ≥ y_{si} + z_{ws} - 1   \forall i ∈ N, w ∈ W, s ∈ S   (R4.3)
 ```
 
-Restrição de Incapacidade: Se o trabalhador w é incapaz de executar a tarefa i (ou seja, t_wi = infinito), então u_wis deve ser zero para todos os s:
+Restrição de Incapacidade: Se o trabalhador w é incapaz de executar a tarefa i (ou seja, t_wi = infinito), então u_wis deve ser zer \foralls os s:
 
 ```math
-u_{wis} = 0   para todo i ∈ I_w, w ∈ W, s ∈ S   (R5)
+u_{wis} = 0   \forall i ∈ I_w, w ∈ W, s ∈ S   (R5)
 ```
 
 _Nota: Esta restrição pode ser simplificada se a matriz t_wi for tratada no modelo, mas a formulação explícita é mais clara._
@@ -93,7 +93,7 @@ _Nota: Esta restrição pode ser simplificada se a matriz t_wi for tratada no mo
 O tempo total de trabalho em cada estação s deve ser menor ou igual ao tempo de ciclo C_max:
 
 ```math
-∑_{i ∈ N} ∑_{w ∈ W} t_{wi} u_{wis} ≤ C_max   para todo s ∈ S   (R6)
+∑_{i ∈ N} ∑_{w ∈ W} t_{wi} u_{wis} ≤ C_max   \forall s ∈ S   (R6)
 ```
 
 ### 4. Restrições de Precedência
@@ -101,7 +101,7 @@ O tempo total de trabalho em cada estação s deve ser menor ou igual ao tempo d
 Se a tarefa i precede a tarefa j ((i, j) ∈ P), então a estação que executa i deve ser anterior ou igual à estação que executa j:
 
 ```math
-∑_{s ∈ S} s * y_{si} ≤ ∑_{s ∈ S} s * y_{sj}   para todo (i, j) ∈ P   (R7)
+∑_{s ∈ S} s * y_{si} ≤ ∑_{s ∈ S} s * y_{sj}   \forall (i, j) ∈ P   (R7)
 ```
 
 ### 5. Domínio das Variáveis
@@ -125,7 +125,7 @@ Uma solução S é definida por dois vetores principais:
 
 A função objetivo é o tempo de ciclo (C_max), calculado como o tempo máximo de processamento entre todas as estações. A avaliação também verifica a factibilidade da solução:
 
-1.  **Factibilidade de Precedência:** Para todo par de precedência (i, j), a estação de i deve ser menor ou igual à estação de j.
+1.  \*_Factibilidade de Precedência:_ \forall par de precedência (i, j), a estação de i deve ser menor ou igual à estação de j.
 2.  **Factibilidade de Incapacidade:** Nenhuma tarefa i pode ser atribuída a uma estação s cujo trabalhador alocado Z[s] é incapaz de executá-la (tempo de execução t\_{Z[s], i} = infinito).
 
 Soluções infactíveis são penalizadas com um C_max = infinito.
